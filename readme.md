@@ -9,13 +9,14 @@
 
 ## Подробности
 Работа __webpack-dev-server__ описана в __webpack.config.js__:
-```devServer: {
+```JSON
+devServer: {
     contentBase: path.join(__dirname, "dist"),
     compress: true,
     port: 9000,
     watchContentBase: true,
     progress: true
-  }
+}
 ```
 - __port__ - указывает 9000 порт для запуска, если он занят смените на доступный.
 - Папка "dist" - директория для запуска приложения.
