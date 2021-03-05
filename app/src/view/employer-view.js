@@ -4,6 +4,7 @@ import MaterialTable        from "material-table";
 import Select               from '@material-ui/core/Select';
 import MenuItem             from '@material-ui/core/MenuItem';
 import Checkbox             from '@material-ui/core/Checkbox';
+import DatePicker           from '@material-ui/pickers/DatePicker';
 
 import AddBox               from '@material-ui/icons/AddBox';
 import ArrowDownward        from '@material-ui/icons/ArrowDownward';
@@ -63,8 +64,40 @@ class EmployerView extends React.Component {
     render() {
         return (
             <MaterialTable 
+                title='Сотрудники компании'
+                localization={{
+                    body: {
+                        emptyDataSourceMessage: "Нет данных",
+                        addTooltip: 'Добавить',
+                        deleteTooltip: 'Удалить',
+                        editTooltip: 'Изменить',
+                        editRow: {
+                            deleteText: "Удалить сотрудника?",
+                            cancelTooltip: 'Отменить',
+                            saveTooltip: 'Сохранить'
+                        }
+                    },
+                    pagination: {                        
+                        firstTooltip: 'Первая страница',
+                        previousTooltip: 'Предыдущая страница',
+                        nextTooltip: 'Следующая страница',
+                        labelDisplayedRows: '{from}-{to} из {count}',
+                        lastTooltip: 'Последняя страница',
+                        labelRowsSelect: 'строк'
+                    },
+                    header: {
+                        actions: 'Действия'
+                    },
+                    toolbar: {
+                        searchTooltip: 'Поиск',
+                        searchPlaceholder: 'Поиск'
+                    }
+                }}
                 options={{
-                    pageSize: 10
+                    pageSize: 10,
+                    rowStyle: {
+                        backgroundColor: '#EEE',
+                    }
                 }}
                 icons={tableIcons}
                 columns={[
@@ -77,34 +110,49 @@ class EmployerView extends React.Component {
                     {
                         title:  "Фамилия",
                         field:  "soname",
-                        type:   "string"
+                        type:   "string",
+                        validate: rowData => (rowData.soname != undefined ?
+                            rowData.soname.match(/^[А-Я][а-я]*$/g) == null : true) ? 
+                        { isValid: false, helperText: 'Фамилия обязательно задаётся с большой буквы. Русские буквы без пробелов' } : true
                     },                    
                     {
                         title:  "Имя",
                         field:  "name",
-                        type:   "string"
+                        type:   "string",
+                        validate: rowData => (rowData.name != undefined ?
+                            rowData.name.match(/^[А-Я][а-я]*$/g) == null : true) ? 
+                        { isValid: false, helperText: 'Имя обязательно задаётся с большой буквы. Русские буквы без пробелов' } : true
                     },                    
                     {
                         title:  "Отчество",
                         field:  "patronymic",
-                        type:   "string"
+                        type:   "string",
+                        validate: rowData => (rowData.patronymic != undefined ? 
+                            rowData.patronymic.match(/^[А-Я]*$|^[А-Я][а-я]*$/g) == null : false) ? 
+                        { isValid: false, helperText: 'Отчество задаётся не обязательно с большой буквы. Русские буквы без пробелов' } : true
                     },                    
                     {
                         title:  "Должность",
                         field:  "position",
-                        type:   "string"
+                        type:   "string",
+                        validate: rowData => (rowData.position != undefined ? 
+                            rowData.position.match(/^[А-Я][а-я]*$/g) == null : true) ? 
+                        { isValid: false, helperText: 'Должность обязательно задаётся с большой буквы. Русские буквы без пробелов' } : true
                     },                    
                     {
                         title:  "День рождения",
                         field:  "birthDay",
-                        type:   "date"
+                        type:   "date",
+                        validate: rowData => rowData.birthDay == undefined ?
+                        { isValid: false, helperText: 'День рождения задаётся обязательно' } : true
                     },                    
                     {
                         title:  "Пол",
                         field:  "sex",
+                        type:   "string",
                         editComponent: props => (
                             <Select 
-                                value={props.value || ''}
+                                value={props.value || "Мужчина"}
                                 onChange={e => props.onChange(e.target.value)}
                                 >
                                 
@@ -116,12 +164,20 @@ class EmployerView extends React.Component {
                     {
                         title:  "Дата трудоустройства",
                         field:  "employmentDate",
-                        type:   "date"
+                        type:   "date",
+                        validate: rowData => rowData.employmentDate == undefined ?
+                        { isValid: false, helperText: 'Дата трудоустройства задаётся обязательно' } : true
                     },                    
                     {
                         title:  "Дата увольнения",
                         field:  "dismissal",
-                        type:   "date"
+                        type:   "date",
+                        validate: rowData => rowData.dismissal != undefined ?   // Дата увольнения задана?
+                            rowData.employmentDate != undefined ?               // Дата устройства задана? 
+                                rowData.dismissal < rowData.employmentDate ?    // Увольнения < устройства 
+                                    { isValid: false, helperText: 'Дата увольнения должна быть позже даты устройства на работу' } : true
+                                : { isValid: false, helperText: 'Задайте дату трудоустройства' }   //надо задать                                         
+                            : true                                              // Ничего не задано, принять
                     },                    
                     {
                         title:  "Наличие водительских прав",
@@ -141,31 +197,38 @@ class EmployerView extends React.Component {
                 ]}
                 data={this.state.data}
                 editable={{
+                    // --- Добавление сотрудника ---
                     onRowAdd: newData =>
                     new Promise((resolve, reject) => {
                         setTimeout(() => {
+                            console.log(newData);
                             newData.birthDay        = newData.birthDay == null ?            undefined : new Date(newData.birthDay);
                             newData.employmentDate  = newData.employmentDate == null ?      undefined : new Date(newData.employmentDate);
                             newData.dismissal       = newData.dismissal == null ?           undefined : new Date(newData.dismissal);
                             newData.driverLicense   = newData.driverLicense == undefined ?  false : newData.driverLicense;
+                            newData.sex             = newData.sex == undefined ?            "Мужчина" : newData.sex;
 
                             store({ name: actions.ADD }, newData);
                             this.update();                            
                             resolve();
                         }, 1000)
                     }),
+                    // --- Изменение сотрудника ---
                     onRowUpdate: (newData, oldData) =>
                     new Promise((resolve, reject) => {
                         setTimeout(() => {
+                            console.log(newData);
                             newData.birthDay        = newData.birthDay == null ?        undefined : new Date(newData.birthDay);
                             newData.employmentDate  = newData.employmentDate == null ?  undefined : new Date(newData.employmentDate);
                             newData.dismissal       = newData.dismissal == null ?       undefined : new Date(newData.dismissal);
+                            console.log(newData);
 
                             store({ name: actions.MODIF }, newData)
                             this.update();
                             resolve();
                         }, 1000)
                     }),
+                    // --- Удаление сотрудника ---
                     onRowDelete: oldData =>
                     new Promise((resolve, reject) => {
                         setTimeout(() => {

@@ -26,7 +26,7 @@ const actions = {
 function add(employer) {
     if(confirm(employer)) {
         if(isExist(employer) != undefined) {
-            //console.log("Сотрудник с ID=" + employer.id + " существует");
+            console.log("Сотрудник с ID=" + employer.id + " существует");
             return;
         } else {
             employer.id = maxIndex() + 1;
@@ -36,10 +36,10 @@ function add(employer) {
     
             var serialObj = JSON.stringify(storeObj);
             localStorage.setItem("Store", serialObj);
-            //console.log("Сотрудник добавлен ID=" + employer.id);
+            console.log("Сотрудник добавлен ID=" + employer.id);
         }       
     } else {
-        //console.log("Сотрудник не добавлен");
+        console.log("Сотрудник не добавлен");
     }
 }
 
@@ -112,15 +112,15 @@ function get() {
     var storeObj = JSON.parse(localStorage.getItem("Store"));
     if(storeObj == null || storeObj == undefined) {
         return [];
-    } else {
-        storeObj.forEach(function(item, i, storeObj)
-        {
-            var itemWithType = item;
-            item.birthDay       = new Date(item.birthDay);
-            item.employmentDate = new Date(item.employmentDate);
-            item.dismissal      = new Date(item.dismissal);
-            item                = new Boolean(item.driverLicense);
-        })
+    } else {                
+        //console.log(storeObj);
+        //storeObj.forEach(function(item, i, storeObj)
+        //{
+            //item.birthDay       = new Date(item.birthDay);
+            //item.employmentDate = new Date(item.employmentDate);
+            //item.dismissal      = new Date(item.dismissal);
+            //item                = new Boolean(item.driverLicense);
+        //})
         return storeObj;
     }
 }
@@ -130,18 +130,18 @@ function confirm(employer) {
         //console.log("Сотрудник не задан");
         return Boolean(false);
     }   
-
-    //console.log(typeof(employerExample.soname)          == typeof(employer.soname));
-    //console.log(typeof(employerExample.name)            == typeof(employer.name));
-    //console.log(typeof(employerExample.position)        == typeof(employer.position));
-    //console.log(typeof(employerExample.birthDay)        == typeof(employer.birthDay));
-    //console.log(typeof(employerExample.sex)             == typeof(employer.sex));
-    //console.log(typeof(employerExample.employmentDate)  == typeof(employer.employmentDate));
-    //console.log(typeof(employerExample.driverLicense)   == typeof(employer.driverLicense));
-    //console.log((typeof(employerExample.patronymic)     == typeof(employer.patronymic) || 
-    //typeof(employer.patronymic)         == typeof(undefined)));
-    //console.log((typeof(employerExample.dismissal)      == typeof(employer.dismissal) || 
-    //typeof(employer.dismissal)         == typeof(undefined)));
+    
+    console.log(typeof(employerExample.soname)          == typeof(employer.soname));
+    console.log(typeof(employerExample.name)            == typeof(employer.name));
+    console.log(typeof(employerExample.position)        == typeof(employer.position));
+    console.log(typeof(employerExample.birthDay)        == typeof(employer.birthDay));
+    console.log(typeof(employerExample.sex)             == typeof(employer.sex));
+    console.log(typeof(employerExample.employmentDate)  == typeof(employer.employmentDate));
+    console.log(typeof(employerExample.driverLicense)   == typeof(employer.driverLicense));
+    console.log((typeof(employerExample.patronymic)     == typeof(employer.patronymic) || 
+    typeof(employer.patronymic)         == typeof(undefined)));
+    console.log((typeof(employerExample.dismissal)      == typeof(employer.dismissal) || 
+    typeof(employer.dismissal)         == typeof(undefined)));
 
 
     if(
@@ -160,17 +160,17 @@ function confirm(employer) {
                 typeof(employer.dismissal)         == typeof(undefined))                      
         )
     ) {
-        //console.log("Не правильно задан сотрудник");
+        console.log("Не правильно задан сотрудник");
         return Boolean(false);
     } else {
         // --- Можно работать с таким сотрудником ---
-        //console.log("Тип основных параметров верен");
+        console.log("Тип основных параметров верен");
         if(typeof(employer.dismissal) != typeof(undefined)) {
-            if(employer.dismissal < employerExample.employmentDate) {
-                //console.log("Дата увольнения сотрудника раньше, чем дата устройства на работу");
+            if(employer.dismissal < employer.employmentDate) {
+                console.log("Дата увольнения сотрудника раньше, чем дата устройства на работу");
                 return Boolean(false);
             } else {
-                //console.log("Параметры сотрудника верны");
+                console.log("Параметры сотрудника верны");
                 return Boolean(true);
             }
         } else {
