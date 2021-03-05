@@ -26,7 +26,7 @@ const actions = {
 function add(employer) {
     if(confirm(employer)) {
         if(isExist(employer) != undefined) {
-            console.log("Сотрудник с ID=" + employer.id + " существует");
+            //console.log("Сотрудник с ID=" + employer.id + " существует");
             return;
         } else {
             employer.id = maxIndex() + 1;
@@ -36,10 +36,10 @@ function add(employer) {
     
             var serialObj = JSON.stringify(storeObj);
             localStorage.setItem("Store", serialObj);
-            console.log("Сотрудник добавлен ID=" + employer.id);
+            //console.log("Сотрудник добавлен ID=" + employer.id);
         }       
     } else {
-        console.log("Сотрудник не добавлен");
+        //console.log("Сотрудник не добавлен");
     }
 }
 
@@ -56,11 +56,12 @@ function maxIndex() {
 }
 
 // --- Существует ли сотрудник? Возвращает его индекс в массиве ---
+// Возвращает undefined если не существует
 function isExist(employer) {
     var storeObj = store({ name: actions.GET });
     for(let i = 0; i < storeObj.length; i++) {
-        console.log(storeObj[i].id);
-        console.log(employer.id);
+        //console.log(storeObj[i].id);
+        //console.log(employer.id);
         if(employer.id == storeObj[i].id) {
             return i;
         }
@@ -76,18 +77,16 @@ function allDataSet(data) {
 }
 
 function modif(employer) {
-    console.log("M");
-    console.log(employer);
-    console.log(store({ name: actions.GET }));
+    //console.log(employer);
+    //console.log(store({ name: actions.GET }));
     if(!confirm(employer)) {
-        console.log("Неправильно введён сотрудник");
+        //console.log("Неправильно введён сотрудник");
         return;
     }   
 
-    console.log('!');
     var index = isExist(employer);
     if(index == undefined) {
-        console.log("Такого сотрудника не существует");
+        //console.log("Такого сотрудника не существует");
         return;
     } else {
         var storeObj = store({ name: actions.GET });
@@ -96,8 +95,17 @@ function modif(employer) {
     }
 }
 
-function del() {
+function del(employer) {
+    var index = isExist(employer);
+    if(index != undefined) {
+        //console.log("Сотрудник существует");
 
+        var storeObj = store({ name: actions.GET });
+        storeObj.splice(index, 1);
+        allDataSet(storeObj);
+    } else {
+        //console.log("Сотрудника не существует");
+    }
 }
 
 function get() {
@@ -119,7 +127,7 @@ function get() {
 
 function confirm(employer) {
     if(typeof(employer) == typeof(undefined)) {
-        console.log("Сотрудник не задан");
+        //console.log("Сотрудник не задан");
         return Boolean(false);
     }   
 
@@ -133,7 +141,8 @@ function confirm(employer) {
     //console.log((typeof(employerExample.patronymic)     == typeof(employer.patronymic) || 
     //typeof(employer.patronymic)         == typeof(undefined)));
     //console.log((typeof(employerExample.dismissal)      == typeof(employer.dismissal) || 
-    //typeof(employer.patronymic)         == typeof(undefined)));
+    //typeof(employer.dismissal)         == typeof(undefined)));
+
 
     if(
         !(
@@ -148,22 +157,24 @@ function confirm(employer) {
             (typeof(employerExample.patronymic)     == typeof(employer.patronymic) || 
                 typeof(employer.patronymic)         == typeof(undefined))               && 
             (typeof(employerExample.dismissal)      == typeof(employer.dismissal) || 
-                typeof(employer.patronymic)         == typeof(undefined))                      
+                typeof(employer.dismissal)         == typeof(undefined))                      
         )
     ) {
-        console.log("Не правильно задан сотрудник");
+        //console.log("Не правильно задан сотрудник");
         return Boolean(false);
     } else {
         // --- Можно работать с таким сотрудником ---
-        console.log("Тип основных параметров верн");
+        //console.log("Тип основных параметров верен");
         if(typeof(employer.dismissal) != typeof(undefined)) {
             if(employer.dismissal < employerExample.employmentDate) {
-                console.log("Дата увольнения сотрудника раньше, чем дата устройства на работу");
+                //console.log("Дата увольнения сотрудника раньше, чем дата устройства на работу");
                 return Boolean(false);
             } else {
-                console.log("Параметры сотрудника верны");
+                //console.log("Параметры сотрудника верны");
                 return Boolean(true);
             }
+        } else {
+            return Boolean(true);
         }
     }
 }
@@ -175,9 +186,10 @@ function store(action, employer) {
         case actions.MODIF:
             return modif(employer);
         case actions.DEL:
-            return del();
+            return del(employer);
         case actions.GET:
             return get();
+            // Лишнее
         case actions.SET:
             return allDataSet();
 
