@@ -4,7 +4,7 @@ import MaterialTable        from "material-table";
 import Select               from '@material-ui/core/Select';
 import MenuItem             from '@material-ui/core/MenuItem';
 import Checkbox             from '@material-ui/core/Checkbox';
-import DatePicker           from '@material-ui/pickers/DatePicker';
+import ruLocale             from 'date-fns/locale/ru';
 
 import AddBox               from '@material-ui/icons/AddBox';
 import ArrowDownward        from '@material-ui/icons/ArrowDownward';
@@ -75,7 +75,8 @@ class EmployerView extends React.Component {
                             deleteText: "Удалить сотрудника?",
                             cancelTooltip: 'Отменить',
                             saveTooltip: 'Сохранить'
-                        }
+                        },
+                        dateTimePickerLocalization: ruLocale
                     },
                     pagination: {                        
                         firstTooltip: 'Первая страница',
