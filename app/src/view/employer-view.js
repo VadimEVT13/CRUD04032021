@@ -187,8 +187,6 @@ class EmployerView extends React.Component {
                             <Checkbox 
                                 checked={ props.value || false }
                                 onChange={e => { 
-                                     
-                                    console.log(props); 
                                     props.onChange(e.target.checked); }}
                                 >
                             </Checkbox>
@@ -201,7 +199,6 @@ class EmployerView extends React.Component {
                     onRowAdd: newData =>
                     new Promise((resolve, reject) => {
                         setTimeout(() => {
-                            console.log(newData);
                             newData.birthDay        = newData.birthDay == null ?            undefined : new Date(newData.birthDay);
                             newData.employmentDate  = newData.employmentDate == null ?      undefined : new Date(newData.employmentDate);
                             newData.dismissal       = newData.dismissal == null ?           undefined : new Date(newData.dismissal);
@@ -217,11 +214,9 @@ class EmployerView extends React.Component {
                     onRowUpdate: (newData, oldData) =>
                     new Promise((resolve, reject) => {
                         setTimeout(() => {
-                            console.log(newData);
                             newData.birthDay        = newData.birthDay == null ?        undefined : new Date(newData.birthDay);
                             newData.employmentDate  = newData.employmentDate == null ?  undefined : new Date(newData.employmentDate);
                             newData.dismissal       = newData.dismissal == null ?       undefined : new Date(newData.dismissal);
-                            console.log(newData);
 
                             store({ name: actions.MODIF }, newData)
                             this.update();

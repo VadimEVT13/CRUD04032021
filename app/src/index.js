@@ -1,8 +1,8 @@
 import React              from 'react';
 import ReactDOM           from 'react-dom';
-import App                from './view/app.js';
+import EmployerView       from './view/employer-view.js';
 
 ReactDOM.render(
-	<App/>,
+	<EmployerView/>,
 	document.getElementById("root")
 );

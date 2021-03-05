@@ -1,20 +1,6 @@
 import React                from 'react';
 import { store, actions }   from '../store/store.js';
-import EmployerView         from './employer-view.js'
-
-var employerExample = {
-    soname:         "Артемьев",
-    name:           "Вадим",
-    patronymic:     "Владимирович",
-    position:       "Программист",
-    birthDay:       new Date("August 27, 1995"),
-    sex:            "Мужчина",
-    employmentDate: new Date("March 04, 2021"),
-    dismissal:      new Date("March 11, 2021"),
-    driverLicense:  Boolean(false)
-  };
-  
-var employerList = [];
+import EmployerView         from './employer-view.js';
 
 class App extends React.Component {
     constructor(props) {
@@ -30,9 +16,6 @@ class App extends React.Component {
                 MAIN_VIEW: "MAIN_VIEW"
             }
         };
-        
-        // ---  ДЛЯ ТЕСТА ---
-        //store({ name: actions.ADD }, employerExample);
     }
 
     switchContext(name) {
