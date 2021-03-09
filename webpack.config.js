@@ -1,7 +1,7 @@
 var path = require('path');
 
 module.exports = {
-  entry: './app/src/index.js',
+  entry: './app/src/index.tsx',
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist')
@@ -28,7 +28,17 @@ module.exports = {
     {
       test: /\.css$/i,
       use: ["style-loader", "css-loader"]
-    }
+    },
+		{
+			test: /\.tsx?$/,
+			exclude: /node_modules/,
+			use: {
+				loader: 'babel-loader',
+				options: {
+					presets: ['@babel/preset-env', '@babel/preset-typescript', '@babel/preset-react']
+				}
+			}
+		}
   ]
   }
 };
