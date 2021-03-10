@@ -37,7 +37,6 @@ var employer_3 : IEmployer = {
 
 export function init() {
     if(localStorage.getItem("isInit") == null) {
-        console.log(store(actions.GET));
         store(actions.ADD, employer_1);
         store(actions.ADD, employer_2);
         store(actions.ADD, employer_3);

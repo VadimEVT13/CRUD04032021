@@ -1,3 +1,5 @@
+import cuid from 'cuid';
+
 export interface IEmployer {
     soname:             string;
     name:               string;
@@ -19,38 +21,33 @@ export enum actions {
 
 function add(employer : IEmployer) {
     let store = get();
-    if(Object.keys(store).length == 0) {
-        store[0] = employer;
-    } else {
-        let index: number = +Object.keys(store).reduce(function(a, b) { return a > b ? a : b})
-        store[index + 1] = employer;
-    }
+    store[cuid()] = employer;
     set(store);
 }
 
-function set(data: {[id: number]: IEmployer}) {
+function set(data: {[id: string]: IEmployer}) {
     localStorage.setItem("Store", JSON.stringify(data));
 }
 
-function modif(employer: IEmployer, id: number) {
+function modif(employer: IEmployer, id: string) {
     let store = get();
     store[id] = employer;
     set(store);
 }
 
-function del(id: number) {
+function del(id: string) {
     let store = get();
     delete store[id];
     set(store);
 }
 
-function get(): {[id: number]: IEmployer} {
-    let store: {[id: number]: IEmployer} = 
+function get(): {[id: string]: IEmployer} {
+    let store: {[id: string]: IEmployer} = 
         JSON.parse(localStorage.getItem("Store"));
     return store == null ? {} : store;
 }
 
-export function store(action: actions, employer: IEmployer, id: number = -1) {
+export function store(action: actions, employer: IEmployer, id: string = undefined) {
     switch(action) {
         case actions.ADD:
             return add(employer);

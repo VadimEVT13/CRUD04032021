@@ -4,12 +4,13 @@ import MenuItem             from '@material-ui/core/MenuItem';
 import Checkbox             from '@material-ui/core/Checkbox';
 
 const columns=[
-    {
-        title:      "ID",
-        field:      "id",
-        type:       "numeric",
-        editable:   "never"
-    },                    
+// --- Идентификатор пользователя не отображается ---
+//    {
+//        title:      "ID с использованим CUID",
+//        field:      "id",
+//        type:       "string",
+//        editable:   "never"
+//    },                    
     {
         title:  "Фамилия",
         field:  "soname",

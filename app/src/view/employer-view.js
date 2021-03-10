@@ -24,7 +24,7 @@ class EmployerView extends React.Component {
         let data = [];
         let input = store(actions.GET);
         Object.keys(input).forEach(element => {
-            input[element].id = parseInt(element);
+            input[element].id = element;
             data.push(input[element]);
         });
 
@@ -38,7 +38,7 @@ class EmployerView extends React.Component {
         let data = [];
         let input = store(actions.GET);
         Object.keys(input).forEach(element => {
-            input[element].id = parseInt(element);
+            input[element].id = element;
             data.push(input[element]);
         });
 
